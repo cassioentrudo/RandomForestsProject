@@ -1,5 +1,14 @@
 import math
-from DadosTreinamento import DadosTreinamento
+from DadosTreinamento import table
+
+
+
+table
+
+#%%
+
+
+
 
 
 dados = DadosTreinamento()
