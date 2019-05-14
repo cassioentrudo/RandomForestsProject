@@ -8,7 +8,7 @@ def DataRead(str1, useCols, tablenames):
     return dataTable
 
 
-tablePath = "D:/git/randomTree/dadosBenchmark_validacaoAlgoritmoAD.csv"
+tablePath = "dadosBenchmark_validacaoAlgoritmoAD.csv"
 
 
 useColls = [0, 1, 2, 3, 4]
