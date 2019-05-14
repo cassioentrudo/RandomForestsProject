@@ -1,19 +1,6 @@
 import pandas as pd
 import numpy as np
-
-
-def DataRead(str1, useCols, tablenames):
-    dataTable = pd.read_csv("%s" % str1, header=None, sep="\s*\;",usecols=useCols, names=tablenames,  engine='python')
-    dataTable.drop(dataTable.index[[0]], inplace=True)
-    return dataTable
-
-
-tablePath = "D:/git/randomTree/dadosBenchmark_validacaoAlgoritmoAD.csv"
-
-
-useColls = [0, 1, 2, 3, 4]
-tableCollumns = ['Tempo','Temperatura','Umidade','Ventoso','Joga'] 
-table = DataRead(tablePath, useColls , tableCollumns)
+from DadosTreinamento import table
 
 
 #%%
