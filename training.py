@@ -72,39 +72,39 @@ def FindNode(_table):
 
     for feature in GetFeatures(_table):
         gain = GainCalculate(feature, _table)
-        #print("feature=", feature, "gain=", gain)
         if(gain == 0 and feature == GetTargetFeature()):
             return feature
         else:
             if (feature != GetTargetFeature()):
                 gain_dict[feature] = gain
-        #print(feature, "=", gain_dict[feature])
 
     node = max(gain_dict, key=gain_dict.get)
 
     return node
 
 
-def GenerateDecisionTree(_table):
-    rootNode = FindNode(_table)
-    galhos = _table[rootNode].unique().tolist()
+def GenerateDecisionTree(_table, tree):
+    rootNodeName = FindNode(_table)
+    node = Node(rootNodeName)
+    tree.AddNode(node)
+
+    galhos = _table[rootNodeName].unique().tolist()
 
     for galho in galhos:
-        print(rootNode, "->", galho)
-        gp_rootNode = _table.groupby(rootNode)
+
+        gp_rootNode = _table.groupby(rootNodeName)
         gp_galho = gp_rootNode.get_group(galho)
 
-        node = FindNode(gp_galho)
+        nodeName = FindNode(gp_galho)
 
-        if (node == GetTargetFeature()):
-            #print(_table)
-            folha = gp_galho[node].unique().tolist()[0]
-            print("FOLHA---->", folha)
+        if (nodeName == GetTargetFeature()):
+            folha = gp_galho[nodeName].unique().tolist()[0]
+            node.AddEdges(galho, folha)
         else:
-            GenerateDecisionTree(gp_galho)
+            node.AddEdges(galho, nodeName)
+            GenerateDecisionTree(gp_galho, tree)
 
-
-
-
-
-GenerateDecisionTree(table)
+def Classify():
+    decision_tree = Tree()
+    GenerateDecisionTree(table, decision_tree)
+    decision_tree.PrintTree()
