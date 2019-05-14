@@ -1,11 +1,12 @@
 import pandas as pd
 import math
 from DadosTreinamento import table
-
+from tree import Tree
+from tree import Node
 
 def GetFeatures(table_file):
     features = []
-    for col in table:
+    for col in table_file:
         features.append(col)
     return features
 
@@ -15,11 +16,11 @@ def GetTargetFeature():
     return features[-1]
 
 
-def EntropyCalculate():
+def EntropyCalculate(_table):
     feature_target = GetTargetFeature()
-    gp_target = table.groupby(feature_target)
-    feature_values = table[feature_target].unique().tolist()
-    total_instances = len(table)
+    gp_target = _table.groupby(feature_target)
+    feature_values = _table[feature_target].unique().tolist()
+    total_instances = len(_table)
     entropy = 0
 
     for feature_value in feature_values:
@@ -61,37 +62,49 @@ def GainCalculate(feature_name, _table):
 
         gain += (total_valor_atributo/total_instances * entropy)
 
-    gain = EntropyCalculate() - gain
+    gain = EntropyCalculate(_table) - gain
 
     return round(gain, 3)
 
 
 def FindNode(_table):
     gain_dict = {}
+
     for feature in GetFeatures(_table):
-        if feature != GetTargetFeature():
-            gain_dict[feature] = GainCalculate(feature, _table)
-            print(feature, "= ", gain_dict[feature])
+        gain = GainCalculate(feature, _table)
+        #print("feature=", feature, "gain=", gain)
+        if(gain == 0 and feature == GetTargetFeature()):
+            return feature
+        else:
+            if (feature != GetTargetFeature()):
+                gain_dict[feature] = gain
+        #print(feature, "=", gain_dict[feature])
 
-    return max(gain_dict, key=gain_dict.get)
+    node = max(gain_dict, key=gain_dict.get)
+
+    return node
 
 
-def GenerateDecisionTree():
-    #root node
-    rootNode = FindNode(table)
-    print("\nrootName= " , rootNode)
-
-    galhos = table[rootNode].unique().tolist()
-    print("\ngalhos= " , galhos)
+def GenerateDecisionTree(_table):
+    rootNode = FindNode(_table)
+    galhos = _table[rootNode].unique().tolist()
 
     for galho in galhos:
-        gp_rootNode = table.groupby(rootNode)
+        print(rootNode, "->", galho)
+        gp_rootNode = _table.groupby(rootNode)
         gp_galho = gp_rootNode.get_group(galho)
-        print("\n\n",gp_galho)
 
-        FindNode(gp_galho)
+        node = FindNode(gp_galho)
+
+        if (node == GetTargetFeature()):
+            #print(_table)
+            folha = gp_galho[node].unique().tolist()[0]
+            print("FOLHA---->", folha)
+        else:
+            GenerateDecisionTree(gp_galho)
 
 
 
 
-GenerateDecisionTree()
+
+GenerateDecisionTree(table)
