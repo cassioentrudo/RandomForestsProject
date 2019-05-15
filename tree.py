@@ -1,3 +1,8 @@
+from graphviz import Digraph
+
+import os
+os.environ["PATH"] += os.pathsep + 'C:\Program Files (x86)\Graphviz2.38'
+
 class Node:
     def __init__(self, name):
         self.edges = {}
@@ -21,6 +26,19 @@ class Tree:
         self.nodes.append(node)
 
     def PrintTree(self):
-        print("******************** PRINTING TREE ********************")
         for node in self.nodes:
-            node.PrintNode()
+            node.PrintNode()     
+
+
+    def PaintTree(self):        
+        f = Digraph('G', filename='DecisionTree')
+        
+        for node in self.nodes:                      
+            f.node(node.name)
+            
+            for edge in node.edges:
+                f.edge(node.name, node.edges[edge], label=edge)
+#            
+        f.view()
+       
+        

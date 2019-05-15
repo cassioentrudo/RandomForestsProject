@@ -106,5 +106,7 @@ def GenerateDecisionTree(_table, tree):
 
 def Classify():
     decision_tree = Tree()
+    print("Generating Decision Tree...")
     GenerateDecisionTree(table, decision_tree)
-    decision_tree.PrintTree()
+    decision_tree.PaintTree()
+    print("Done")

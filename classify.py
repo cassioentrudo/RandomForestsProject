@@ -1,5 +1,4 @@
 import training as training
-from DadosTreinamento import table
 
 def Classify():
     joga = training.Classify()
@@ -7,3 +6,4 @@ def Classify():
 
 
 Classify()
+
