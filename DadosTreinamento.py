@@ -4,10 +4,9 @@ import numpy as np
 
 #tablePath = "dadosBenchmark_validacaoAlgoritmoAD.csv"
 isNumeric = True
-resultIsNumeric = False
 #tablePath = "wdbc.data"
-#tablePath = "wine.data"
-tablePath = "ionosphere.data"
+tablePath = "wine.data"
+#tablePath = "ionosphere.data"
 
 def DataRead(str1):
     if(isNumeric==True):
@@ -35,5 +34,8 @@ if(tablePath == "wdbc.data"):
 if (tablePath == "wine.data"):
     aux = table["A"]
     table = table.drop(columns="A")
+    for x in range(len(aux)):
+       aux.iloc[x]=names.get(aux.iloc[x])
     table["result"]=aux
+    
     
