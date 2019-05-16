@@ -15,9 +15,3 @@ def bootstrap(aux, n):
     return auxDataframe
 
 
-conjTreino = pd.DataFrame()
-conjTreino = bootstrap(table, len(table))
-
-
-
-
