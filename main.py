@@ -6,7 +6,7 @@ import ensemble
 import votation
 
 numFolds=4
-nTrees=5
+nTrees=10
 
 
 #%%
@@ -20,6 +20,8 @@ def main():
         mostVoted=votation.categoricVotation(forrest, testFold, training.GetTargetFeature())
     else:
         mostVoted=votation.numericVotation(forrest, testFold, training.GetTargetFeature())
-
+    print(mostVoted)
+    
+    
 if __name__ == "__main__":
     main()

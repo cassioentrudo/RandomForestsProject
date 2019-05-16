@@ -95,11 +95,8 @@ def GenerateDecisionTree(_table, tree, isNumeric):
         for galho in galhos:
     
             gp_rootNode = _table.groupby(rootNodeName)
-            print (gp_rootNode)
             gp_galho = gp_rootNode.get_group(galho)
-            print (gp_galho)
             nodeName = FindNode(gp_galho)
-            print (nodeName)
             if (nodeName == GetTargetFeature()):
                 folha = gp_galho[nodeName].unique().tolist()[0]
                 node.AddEdges(galho, folha)
@@ -132,10 +129,10 @@ def GetIndexFeatureByName(featurename):
     for i in range(len(features)-1):
         if(featurename == features[i]):
             return i
-            
+#%%
 
-def Classify():
-    instance = "Ensolarado;Quente;Alta;Falso;Nao"
+def Classify(decision_tree, instance):
+#    instance = "Ensolarado;Quente;Alta;Falso;Nao"
 #    instance = "Ensolarado;Quente;Alta;Verdadeiro;Nao"
 #    instance = "Nublado;Quente;Alta;Falso;Sim"
 #    instance = "Chuvoso;Amena;Alta;Falso;Sim"
@@ -150,24 +147,25 @@ def Classify():
 #    instance = "Nublado;Quente;Normal;Falso;Sim"
 #    instance = "Chuvoso;Amena;Alta;Verdadeiro;Nao"
     
-    decision_tree = Tree()
-    GenerateDecisionTree(table, decision_tree, isNumeric)
-    #decision_tree.PrintTree()    
+#    decision_tree = Tree()
+#    GenerateDecisionTree(table, decision_tree, isNumeric)
+#    decision_tree.PrintTree()    
         
-    attributes = instance.split(";")    
+#    attributes = instance.split(";")    
     next_node = decision_tree.GetRootNode()
     result = ""
+    #print(instance)
     
     while(next_node != ""):
-        print ("next_node=", next_node.name)
+        #print ("next_node=", next_node.name)
         index = GetIndexFeatureByName(next_node.name)
-        edge = attributes[index]
-        print("edge=", edge)
-        print("next_node.edges", next_node.edges)
+        edge = instance.iloc[index]
+        #print("edge=", edge)
+        #print("next_node.edges", next_node.edges)
         
         result = next_node.edges[edge]
         next_node = decision_tree.GetNodeByName(next_node.edges[edge])       
-          
     
-    print ("\nResultado= ", result)
+    print(result)
+    return result
     
