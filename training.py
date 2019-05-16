@@ -1,4 +1,3 @@
-import pandas as pd
 import math
 from DadosTreinamento import table
 from tree import Tree
@@ -35,12 +34,11 @@ def GainCalculate(feature_name, _table):
     feature_target_values = _table[feature_target].unique().tolist()
     gp_feature = _table.groupby(feature_name)
     feature_values = _table[feature_name].unique().tolist()
-    gr_target_feature = _table.groupby(feature_target)
 
-    entropy = 0
+    info = 0
     gain = 0
     for feature_value in feature_values:
-        entropy = 0
+        info = 0
         for feature_target_value in feature_target_values:
             gp_valor_atributo = gp_feature.get_group(feature_value)
             gp_valor_atributo_target = gp_valor_atributo.groupby(feature_target)
@@ -51,16 +49,16 @@ def GainCalculate(feature_name, _table):
                 count_gp_atributo_target = 0
 
             if(count_gp_atributo_target != 0):
-                entropy -= (((count_gp_atributo_target/len(gp_valor_atributo))) * (math.log2(count_gp_atributo_target/len(gp_valor_atributo))))
+                info -= (((count_gp_atributo_target/len(gp_valor_atributo))) * (math.log2(count_gp_atributo_target/len(gp_valor_atributo))))
             else:
-                 entropy = 0
+                 info = 0
 
-        entropy = round(entropy, 3)
+        info = round(info, 3)
 
         total_instances = len(_table)
         total_valor_atributo = len(gp_valor_atributo)
 
-        gain += (total_valor_atributo/total_instances * entropy)
+        gain += (total_valor_atributo/total_instances * info)
 
     gain = EntropyCalculate(_table) - gain
 
@@ -103,10 +101,48 @@ def GenerateDecisionTree(_table, tree):
         else:
             node.AddEdges(galho, nodeName)
             GenerateDecisionTree(gp_galho, tree)
+            
+def GetIndexFeatureByName(featurename):
+    features = GetFeatures(table)
+    for i in range(len(features)-1):
+        if(featurename == features[i]):
+            return i
+            
 
 def Classify():
+    instance = "Ensolarado;Quente;Alta;Falso;Nao"
+#    instance = "Ensolarado;Quente;Alta;Verdadeiro;Nao"
+#    instance = "Nublado;Quente;Alta;Falso;Sim"
+#    instance = "Chuvoso;Amena;Alta;Falso;Sim"
+#    instance = "Chuvoso;Fria;Normal;Falso;Sim"
+#    instance = "Chuvoso;Fria;Normal;Verdadeiro;Nao"
+#    instance = "Nublado;Fria;Normal;Verdadeiro;Sim"
+#    instance = "Ensolarado;Amena;Alta;Falso;Nao"
+#    instance = "Ensolarado;Fria;Normal;Falso;Sim"
+#    instance = "Chuvoso;Amena;Normal;Falso;Sim"
+#    instance = "Ensolarado;Amena;Normal;Verdadeiro;Sim"
+#    instance = "Nublado;Amena;Alta;Verdadeiro;Sim"
+#    instance = "Nublado;Quente;Normal;Falso;Sim"
+#    instance = "Chuvoso;Amena;Alta;Verdadeiro;Nao"
+    
     decision_tree = Tree()
-    print("Generating Decision Tree...")
     GenerateDecisionTree(table, decision_tree)
-    decision_tree.PaintTree()
-    print("Done")
+    #decision_tree.PrintTree()    
+        
+    attributes = instance.split(";")    
+    next_node = decision_tree.GetRootNode()
+    result = ""
+    
+    while(next_node != ""):
+        print ("next_node=", next_node.name)
+        index = GetIndexFeatureByName(next_node.name)
+        edge = attributes[index]
+        print("edge=", edge)
+        print("next_node.edges", next_node.edges)
+        
+        result = next_node.edges[edge]
+        next_node = decision_tree.GetNodeByName(next_node.edges[edge])       
+          
+    
+    print ("\nResultado= ", result)
+    

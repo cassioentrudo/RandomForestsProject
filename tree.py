@@ -1,8 +1,5 @@
 from graphviz import Digraph
 
-import os
-os.environ["PATH"] += os.pathsep + 'C:\Program Files (x86)\Graphviz2.38'
-
 class Node:
     def __init__(self, name):
         self.edges = {}
@@ -10,8 +7,7 @@ class Node:
 
     def AddEdges(self, edge, child):
         self.edges[edge] = child
-
-
+        
     def PrintNode(self):
         print("********************")
         print("nome =", self.name)
@@ -27,8 +23,21 @@ class Tree:
 
     def PrintTree(self):
         for node in self.nodes:
-            node.PrintNode()     
-
+            node.PrintNode()
+            
+    def GetRootNode(self):
+        return self.nodes[0]
+    
+    def GetNodeByName(self, name):
+        nodeName = ""
+        for node in self.nodes:
+            try:
+                if (node.name == name):
+                    nodeName = node
+            except:
+                nodeName = ""
+                print("return empty")
+        return nodeName
 
     def PaintTree(self):        
         f = Digraph('G', filename='DecisionTree')
@@ -37,8 +46,5 @@ class Tree:
             f.node(node.name)
             
             for edge in node.edges:
-                f.edge(node.name, node.edges[edge], label=edge)
-#            
+                f.edge(node.name, node.edges[edge], label=edge)    
         f.view()
-       
-        
