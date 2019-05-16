@@ -1,3 +1,4 @@
+import pandas as pd
 import math
 from DadosTreinamento import table, isNumeric
 from tree import Tree
@@ -123,20 +124,8 @@ def GenerateDecisionTree(_table, tree, isNumeric):
                 folha = biggerGalho[nodeNameBig].unique().tolist()[0]
                 node.AddEdges(galho, folha)
         else:
-<<<<<<< HEAD
-                node.AddEdges(galho, nodeName)
-                GenerateDecisionTree(gp_galho, tree, isNumeric)
-        
-            
-        
-        
-        
-        
-        
-     #%%   
-=======
             node.AddEdges(galho, nodeName)
-            GenerateDecisionTree(gp_galho, tree)
+            GenerateDecisionTree(gp_galho, tree, isNumeric)
             
 def GetIndexFeatureByName(featurename):
     features = GetFeatures(table)
@@ -144,7 +133,6 @@ def GetIndexFeatureByName(featurename):
         if(featurename == features[i]):
             return i
             
->>>>>>> 17d7ec42c6fce7e4577d1a7ed879e93372e19b9e
 
 def Classify():
     instance = "Ensolarado;Quente;Alta;Falso;Nao"
@@ -163,13 +151,7 @@ def Classify():
 #    instance = "Chuvoso;Amena;Alta;Verdadeiro;Nao"
     
     decision_tree = Tree()
-<<<<<<< HEAD
-    print("Generating Decision Tree...")
     GenerateDecisionTree(table, decision_tree, isNumeric)
-    decision_tree.PaintTree()
-    print("Done")
-=======
-    GenerateDecisionTree(table, decision_tree)
     #decision_tree.PrintTree()    
         
     attributes = instance.split(";")    
@@ -189,4 +171,3 @@ def Classify():
     
     print ("\nResultado= ", result)
     
->>>>>>> 17d7ec42c6fce7e4577d1a7ed879e93372e19b9e
