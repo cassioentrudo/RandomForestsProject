@@ -1,11 +1,11 @@
-
+from training import Classify
 
 def categoricVotation(forrest, testFold, targetFeature):
     mostVoted = []
-    for line in testFold:
+    for i in range(len(testFold)):
         answers = {}
         for tree in forrest:
-            vote = classify(tree, testFold[line], targetFeature)
+            vote = Classify(tree, testFold.iloc[i,:])
             if vote in answers:
                 answers[vote] = answers[vote] + 1
             else:
@@ -17,11 +17,11 @@ def categoricVotation(forrest, testFold, targetFeature):
 
 def numericVotation(forrest, testFold, targetFeature):
     mostVoted = []
-    for line in testFold:
+    for i in range(len(testFold)):
         answers = 0
         countAnswers = 0
         for tree in forrest:
-            answers = answers + classify(tree, testFold[line], targetFeature)
+            answers = answers + Classify(tree, testFold.iloc[i,:])
             countAnswers = countAnswers + 1
         mostVoted.append(answers/countAnswers)
     return mostVoted
