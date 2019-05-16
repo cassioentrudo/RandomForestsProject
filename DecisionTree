@@ -1,0 +1,12 @@
+digraph G {
+	Tempo
+	Tempo -> Umidade [label=Ensolarado]
+	Tempo -> Sim [label=Nublado]
+	Tempo -> Ventoso [label=Chuvoso]
+	Umidade
+	Umidade -> Nao [label=Alta]
+	Umidade -> Sim [label=Normal]
+	Ventoso
+	Ventoso -> Sim [label=Falso]
+	Ventoso -> Nao [label=Verdadeiro]
+}

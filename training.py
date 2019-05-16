@@ -1,6 +1,6 @@
 import pandas as pd
 import math
-from DadosTreinamento import table
+from DadosTreinamento import table, isNumeric
 from tree import Tree
 from tree import Node
 
@@ -83,30 +83,62 @@ def FindNode(_table):
     return node
 
 
-def GenerateDecisionTree(_table, tree):
+def GenerateDecisionTree(_table, tree, isNumeric):
     rootNodeName = FindNode(_table)
     node = Node(rootNodeName)
     tree.AddNode(node)
 
-    galhos = _table[rootNodeName].unique().tolist()
 
-    for galho in galhos:
 
-        gp_rootNode = _table.groupby(rootNodeName)
-        gp_galho = gp_rootNode.get_group(galho)
-
-        nodeName = FindNode(gp_galho)
-
-        if (nodeName == GetTargetFeature()):
-            folha = gp_galho[nodeName].unique().tolist()[0]
-            node.AddEdges(galho, folha)
+    if(isNumeric==False):
+        galhos = _table[rootNodeName].unique().tolist()
+    
+        for galho in galhos:
+    
+            gp_rootNode = _table.groupby(rootNodeName)
+            print (gp_rootNode)
+            gp_galho = gp_rootNode.get_group(galho)
+            print (gp_galho)
+            nodeName = FindNode(gp_galho)
+            print (nodeName)
+            if (nodeName == GetTargetFeature()):
+                folha = gp_galho[nodeName].unique().tolist()[0]
+                node.AddEdges(galho, folha)
+            else:
+                node.AddEdges(galho, nodeName)
+                GenerateDecisionTree(gp_galho, tree, isNumeric)
+    else:
+        tableMean = _table[rootNodeName].mean()
+        biggerGalho = []
+        smallerGalho = []
+        
+        for i in range(len(_table)):
+            if(_table.iloc[i,rootNodeName]>tableMean):
+                biggerGalho.append(_table.iloc[i,:])
+            else:
+                smallerGalho.append(_table.iloc[i,:])
+        
+        nodeNameBig = FindNode(biggerGalho)
+        nodeNameSmall = FindNode(smallerGalho)
+        
+        if (nodeNameBig == GetTargetFeature()):
+                folha = biggerGalho[nodeNameBig].unique().tolist()[0]
+                node.AddEdges(galho, folha)
         else:
-            node.AddEdges(galho, nodeName)
-            GenerateDecisionTree(gp_galho, tree)
+                node.AddEdges(galho, nodeName)
+                GenerateDecisionTree(gp_galho, tree, isNumeric)
+        
+            
+        
+        
+        
+        
+        
+     #%%   
 
 def Classify():
     decision_tree = Tree()
     print("Generating Decision Tree...")
-    GenerateDecisionTree(table, decision_tree)
+    GenerateDecisionTree(table, decision_tree, isNumeric)
     decision_tree.PaintTree()
     print("Done")

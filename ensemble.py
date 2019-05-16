@@ -1,6 +1,6 @@
 import pandas as pd
 from bootstrap import bootstrap
-from DadosTreinamento import table
+from DadosTreinamento import table, isNumeric
 from tree import Tree
 import training
 
@@ -13,7 +13,7 @@ def afforestation(dataTable, nTree):
     for x in range(nTree):
         data = bootstrap(table, n)
         decision_tree = Tree()
-        training.GenerateDecisionTree(data, decision_tree)
+        training.GenerateDecisionTree(data, decision_tree, isNumeric)
         florest.append(decision_tree)
     return florest
         

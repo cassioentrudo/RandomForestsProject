@@ -1,5 +1,5 @@
 #MAIN
-from DadosTreinamento import table
+from DadosTreinamento import table, isNumeric
 import k_folds
 import training
 import ensemble
@@ -7,7 +7,7 @@ import votation
 
 numFolds=4
 nTrees=5
-isNumeric=0
+
 
 #%%
 
@@ -16,7 +16,7 @@ def main():
     testFold=folds[numFolds-1]
     folds.pop(numFolds-1)
     forrest = ensemble.afforestation(folds, nTrees)
-    if(isNumeric==0):
+    if(isNumeric==False):
         mostVoted=votation.categoricVotation(forrest, testFold, training.GetTargetFeature())
     else:
         mostVoted=votation.numericVotation(forrest, testFold, training.GetTargetFeature())
