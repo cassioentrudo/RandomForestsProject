@@ -18,42 +18,6 @@ def bootstrap(aux, n):
 conjTreino = pd.DataFrame()
 conjTreino = bootstrap(table, len(table))
 
-conjTeste = pd.DataFrame()
-conjTeste = bootstrap(table, np.random.randint(14))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
