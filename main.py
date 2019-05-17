@@ -5,8 +5,8 @@ import training
 import ensemble
 import votation
 
-numFolds=4
-nTrees=1
+numFolds=10
+nTrees=3
 
 
 #%%

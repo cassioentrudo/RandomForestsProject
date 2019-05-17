@@ -83,10 +83,14 @@ def FindNode(_table):
 
 
 def GenerateDecisionTree(_table, tree, isNumeric, name=None):
-    rootNodeName = FindNode(_table)
     if (name != None):
+        if(name[0]=='b' and name[1]=='i'):
+            rootNodeName = name[4]
+        elif(name[0]=='s' and name[1]=='m'):
+            rootNodeName = name[6]
         node = Node(name)
     else:
+        rootNodeName = FindNode(_table)
         node = Node(rootNodeName)
     tree.AddNode(node)
     _table = _table.reset_index(drop=True)
