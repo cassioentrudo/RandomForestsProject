@@ -1,5 +1,5 @@
 #MAIN
-from DadosTreinamento import table, isNumeric
+from DadosTreinamento import table
 import k_folds
 import training
 import ensemble

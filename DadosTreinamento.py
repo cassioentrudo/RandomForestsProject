@@ -5,8 +5,8 @@ import numpy as np
 #tablePath = "dadosBenchmark_validacaoAlgoritmoAD.csv"
 isNumeric = True
 #tablePath = "wdbc.data"
-tablePath = "wine.data"
-#tablePath = "ionosphere.data"
+#tablePath = "wine.data"
+tablePath = "ionosphere.data"
 
 def DataRead(str1):
     if(isNumeric==True):
