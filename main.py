@@ -16,7 +16,7 @@ def main():
     originalResults = []
     mostVotes = []
     for x in range(len(folds)):
-        trainingFolds=folds
+        trainingFolds=folds.copy()
         testFold=folds[x]
         trainingFolds.pop(x)
         forrest = ensemble.afforestation(folds, nTrees)
