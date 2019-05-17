@@ -1,11 +1,12 @@
 from training import Classify
+from DadosTreinamento import isNumeric
 
 def categoricVotation(forrest, testFold, targetFeature):
     mostVoted = []
     for i in range(len(testFold)):
         answers = {}
         for tree in forrest:
-            vote = Classify(tree, testFold.iloc[i,:])
+            vote = Classify(tree, testFold.iloc[i,:],isNumeric)
             if vote in answers:
                 answers[vote] = answers[vote] + 1
             else:
@@ -21,7 +22,7 @@ def numericVotation(forrest, testFold, targetFeature):
         answers = 0
         countAnswers = 0
         for tree in forrest:
-            answers = answers + Classify(tree, testFold.iloc[i,:])
+            answers = answers + Classify(tree, testFold.iloc[i,:],isNumeric)
             countAnswers = countAnswers + 1
         mostVoted.append(answers/countAnswers)
     return mostVoted

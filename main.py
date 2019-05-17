@@ -5,8 +5,8 @@ import training
 import ensemble
 import votation
 
-numFolds=4
-nTrees=10
+numFolds=10
+nTrees=3
 
 
 #%%
@@ -16,10 +16,8 @@ def main():
     testFold=folds[numFolds-1]
     folds.pop(numFolds-1)
     forrest = ensemble.afforestation(folds, nTrees)
-    if(isNumeric==False):
-        mostVoted=votation.categoricVotation(forrest, testFold, training.GetTargetFeature())
-    else:
-        mostVoted=votation.numericVotation(forrest, testFold, training.GetTargetFeature())
+    mostVoted=votation.categoricVotation(forrest, testFold, training.GetTargetFeature())
+    print(testFold)
     print(mostVoted)
     
     

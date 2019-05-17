@@ -1,6 +1,6 @@
 import pandas as pd
 import math
-from DadosTreinamento import table, isNumeric
+from DadosTreinamento import table
 from tree import Tree
 from tree import Node
 
@@ -82,10 +82,14 @@ def FindNode(_table):
     return node
 
 
-def GenerateDecisionTree(_table, tree, isNumeric):
+def GenerateDecisionTree(_table, tree, isNumeric, name=None):
     rootNodeName = FindNode(_table)
-    node = Node(rootNodeName)
+    if (name != None):
+        node = Node(name)
+    else:
+        node = Node(rootNodeName)
     tree.AddNode(node)
+    _table = _table.reset_index(drop=True)
 
 
 
@@ -105,24 +109,35 @@ def GenerateDecisionTree(_table, tree, isNumeric):
                 GenerateDecisionTree(gp_galho, tree, isNumeric)
     else:
         tableMean = _table[rootNodeName].mean()
-        biggerGalho = []
-        smallerGalho = []
+        biggerGalho = pd.DataFrame()
+        smallerGalho = pd.DataFrame()
         
         for i in range(len(_table)):
-            if(_table.iloc[i,rootNodeName]>tableMean):
-                biggerGalho.append(_table.iloc[i,:])
+            #print(_table.loc[i,rootNodeName])
+            if(_table.loc[i,rootNodeName]>tableMean):
+                biggerGalho = biggerGalho.append(_table.iloc[i])
             else:
-                smallerGalho.append(_table.iloc[i,:])
+                smallerGalho = smallerGalho.append(_table.iloc[i])
+
+        biggerGalho = biggerGalho.drop(columns=rootNodeName)
+        smallerGalho = smallerGalho.drop(columns=rootNodeName)
         
         nodeNameBig = FindNode(biggerGalho)
         nodeNameSmall = FindNode(smallerGalho)
         
         if (nodeNameBig == GetTargetFeature()):
                 folha = biggerGalho[nodeNameBig].unique().tolist()[0]
-                node.AddEdges(galho, folha)
+                node.AddEdgesNumeric("big", folha, tableMean)
         else:
-            node.AddEdges(galho, nodeName)
-            GenerateDecisionTree(gp_galho, tree, isNumeric)
+            node.AddEdgesNumeric("big", "big" + rootNodeName + nodeNameBig, tableMean)
+            GenerateDecisionTree(biggerGalho, tree, isNumeric, "big" + rootNodeName + nodeNameBig)
+            
+        if (nodeNameSmall == GetTargetFeature()):
+                folha = smallerGalho[nodeNameSmall].unique().tolist()[0]
+                node.AddEdgesNumeric("small", folha, tableMean)
+        else:
+            node.AddEdgesNumeric("small", "small" + rootNodeName + nodeNameSmall, tableMean)
+            GenerateDecisionTree(smallerGalho, tree, isNumeric, "small" + rootNodeName + nodeNameSmall)
             
 def GetIndexFeatureByName(featurename):
     features = GetFeatures(table)
@@ -131,7 +146,7 @@ def GetIndexFeatureByName(featurename):
             return i
 #%%
 
-def Classify(decision_tree, instance):
+def Classify(decision_tree, instance, isNumeric):
 #    instance = "Ensolarado;Quente;Alta;Falso;Nao"
 #    instance = "Ensolarado;Quente;Alta;Verdadeiro;Nao"
 #    instance = "Nublado;Quente;Alta;Falso;Sim"
@@ -151,21 +166,37 @@ def Classify(decision_tree, instance):
 #    GenerateDecisionTree(table, decision_tree, isNumeric)
 #    decision_tree.PrintTree()    
         
-#    attributes = instance.split(";")    
+#    attributes = instance.split(";")
+    
     next_node = decision_tree.GetRootNode()
     result = ""
     #print(instance)
+    if (isNumeric == False):
+        while(next_node != ""):
+            #print ("next_node=", next_node.name)
+            index = GetIndexFeatureByName(next_node.name)
+            edge = instance.iloc[index]
+            #print("edge=", edge)
+            #print("next_node.edges", next_node.edges)
+            
+            result = next_node.edges[edge]
+            next_node = decision_tree.GetNodeByName(next_node.edges[edge])       
     
-    while(next_node != ""):
-        #print ("next_node=", next_node.name)
-        index = GetIndexFeatureByName(next_node.name)
-        edge = instance.iloc[index]
-        #print("edge=", edge)
-        #print("next_node.edges", next_node.edges)
+    else:
+        while(next_node != ""):
+            if(next_node.name[0]=='b' and next_node.name[1]=='i'):
+                value = instance.loc[next_node.name[4]]
+            elif(next_node.name[0]=='s' and next_node.name[1]=='m'):
+                value = instance.loc[next_node.name[6]]
+            else:
+                value = instance.loc[next_node.name]
+            if (value>next_node.value["big"]):
+                result=next_node.edges["big"]
+            else:
+                result=next_node.edges["small"]
+            next_node = decision_tree.GetNodeByName(result)
+                
         
-        result = next_node.edges[edge]
-        next_node = decision_tree.GetNodeByName(next_node.edges[edge])       
-    
-    print(result)
+    #print(result)
     return result
     

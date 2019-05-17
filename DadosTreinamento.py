@@ -15,15 +15,16 @@ def DataRead(str1):
         dataTable = pd.read_csv("%s" % str1, sep="\s*\;",  engine='python')
     return dataTable
 
-
 table = DataRead(tablePath)
-names = {}
-for x in range(len(table.columns)):
-    number = x+65
-    if (number>90):
-        number = number+6
-    names[x]=chr(number)
-table = table.rename(columns=names)
+
+if (isNumeric == True):
+    names = {}
+    for x in range(len(table.columns)):
+        number = x+65
+        if (number>90):
+            number = number+6
+        names[x]=chr(number)
+    table = table.rename(columns=names)
 
 if(tablePath == "wdbc.data"):
     table = table.drop(columns="A")

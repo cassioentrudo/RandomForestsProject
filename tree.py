@@ -3,10 +3,15 @@ from graphviz import Digraph
 class Node:
     def __init__(self, name):
         self.edges = {}
+        self.value = {}
         self.name = name
 
     def AddEdges(self, edge, child):
         self.edges[edge] = child
+        
+    def AddEdgesNumeric(self, edge, child, value):
+        self.edges[edge] = child
+        self.value[edge] = value
         
     def PrintNode(self):
         print("********************")
