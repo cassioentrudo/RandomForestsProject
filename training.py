@@ -184,10 +184,13 @@ def Classify(decision_tree, instance, isNumeric):
     
     else:
         while(next_node != ""):
-            if(next_node.name[0]=='b' and next_node.name[1]=='i'):
-                value = instance.loc[next_node.name[4]]
-            elif(next_node.name[0]=='s' and next_node.name[1]=='m'):
-                value = instance.loc[next_node.name[6]]
+            if (len(next_node.name)>1)
+                if(next_node.name[0]=='b' and next_node.name[1]=='i'):
+                    value = instance.loc[next_node.name[4]]
+                elif(next_node.name[0]=='s' and next_node.name[1]=='m'):
+                    value = instance.loc[next_node.name[6]]
+                else:
+                value = instance.loc[next_node.name]
             else:
                 value = instance.loc[next_node.name]
             if (value>next_node.value["big"]):
