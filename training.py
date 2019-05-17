@@ -127,14 +127,14 @@ def GenerateDecisionTree(_table, tree, isNumeric, name=None):
         
         if (nodeNameBig == GetTargetFeature()):
                 folha = biggerGalho[nodeNameBig].unique().tolist()[0]
-                node.AddEdgesNumeric("big", folha, tableMean)
+                node.AddEdgesNumeric("big", "="+folha, tableMean)
         else:
             node.AddEdgesNumeric("big", "big" + rootNodeName + nodeNameBig, tableMean)
             GenerateDecisionTree(biggerGalho, tree, isNumeric, "big" + rootNodeName + nodeNameBig)
             
         if (nodeNameSmall == GetTargetFeature()):
                 folha = smallerGalho[nodeNameSmall].unique().tolist()[0]
-                node.AddEdgesNumeric("small", folha, tableMean)
+                node.AddEdgesNumeric("small", "="+folha, tableMean)
         else:
             node.AddEdgesNumeric("small", "small" + rootNodeName + nodeNameSmall, tableMean)
             GenerateDecisionTree(smallerGalho, tree, isNumeric, "small" + rootNodeName + nodeNameSmall)
@@ -180,6 +180,7 @@ def Classify(decision_tree, instance, isNumeric):
     
     else:
         while(next_node != ""):
+            print("NODO: ", next_node.name)
             if (len(next_node.name)>1):
                 if(next_node.name[0]=='b' and next_node.name[1]=='i'):
                     value = instance.loc[next_node.name[4]]
