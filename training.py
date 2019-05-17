@@ -147,7 +147,7 @@ def GetIndexFeatureByName(featurename):
 #%%
 
 def Classify(decision_tree, instance, isNumeric):
-    print("[TRAINING] Classify() instance=" ,instance, "IsNumeric=" ,  isNumeric)
+    #print("[TRAINING] Classify() instance=" ,instance, "IsNumeric=" ,  isNumeric)
 #    instance = "Ensolarado;Quente;Alta;Falso;Nao"
 #    instance = "Ensolarado;Quente;Alta;Verdadeiro;Nao"
 #    instance = "Nublado;Quente;Alta;Falso;Sim"
@@ -180,7 +180,7 @@ def Classify(decision_tree, instance, isNumeric):
     
     else:
         while(next_node != ""):
-            print("NODO: ", next_node.name)
+            #print("NODO: ", next_node.name)
             if (len(next_node.name)>1):
                 if(next_node.name[0]=='b' and next_node.name[1]=='i'):
                     value = instance.loc[next_node.name[4]]
@@ -197,6 +197,6 @@ def Classify(decision_tree, instance, isNumeric):
             next_node = decision_tree.GetNodeByName(result)
                 
         
-    print("result=", result)
+    #print("result=", result)
     return result
     
